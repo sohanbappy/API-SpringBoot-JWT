@@ -1,12 +1,16 @@
 package com.rokoassessment.models;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 @Table(name="doctor_tb")
@@ -19,8 +23,18 @@ public class Doctor {
 	private String name;
 	@Column(name="joining",nullable=false)
 	private Date joining;
+	@Autowired
+	@ManyToMany(mappedBy="doctors")
+	private List<Patient> patients;
 	
-	
+	public List<Patient> getPatients() {
+		return patients;
+	}
+
+	public void setPatients(List<Patient> patients) {
+		this.patients = patients;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -52,10 +66,6 @@ public class Doctor {
 		this.joining = joining;
 	}
 
-	@Override
-	public String toString() {
-		return "Doctor [id=" + id + ", name=" + name + ", joining=" + joining + "]";
-	}
 	
 
 }

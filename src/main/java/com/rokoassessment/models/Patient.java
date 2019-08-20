@@ -1,12 +1,16 @@
 package com.rokoassessment.models;
 
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 @Table(name="patient_tb")
@@ -28,7 +32,17 @@ public class Patient {
 	private String occupation;
 	@Column(name="symptom_summary")
 	private String symptom_summary;
+	@Autowired
+	@ManyToMany
+	private List<Doctor> doctors;
 	
+	
+	public List<Doctor> getDoctors() {
+		return doctors;
+	}
+	public void setDoctors(List<Doctor> doctors) {
+		this.doctors = doctors;
+	}
 	public int getId() {
 		return id;
 	}
@@ -81,11 +95,6 @@ public class Patient {
 		this.gender = gender;
 		this.occupation = occupation;
 		this.symptom_summary = symptom_summary;
-	}
-	@Override
-	public String toString() {
-		return "Patient [id=" + id + ", name=" + name + ", mobile=" + mobile + ", age=" + age + ", gender=" + gender
-				+ ", occupation=" + occupation + ", symptom_summary=" + symptom_summary + "]";
 	}
 	
 
