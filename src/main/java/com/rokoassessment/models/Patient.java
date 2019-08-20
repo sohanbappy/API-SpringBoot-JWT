@@ -24,7 +24,6 @@ public class Patient {
 	@Column(name="mobile",nullable=false)
 	private String mobile;
 	@Column(name="age",nullable=false)
-	@Size(min=1,max=3)
 	private int age;
 	@Column(name="gender",nullable=false)
 	private String gender;
