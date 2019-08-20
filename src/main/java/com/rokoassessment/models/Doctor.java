@@ -21,6 +21,16 @@ public class Doctor {
 	private int id;
 	@Column(name="name",nullable=false)
 	private String name;
+	@Column(name="dept",nullable=false)
+	private String dept;
+	public String getDept() {
+		return dept;
+	}
+
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
+
 	@Column(name="joining",nullable=false)
 	private Date joining;
 	@Autowired
