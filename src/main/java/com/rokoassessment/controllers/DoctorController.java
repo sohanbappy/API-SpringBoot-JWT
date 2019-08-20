@@ -30,7 +30,7 @@ public class DoctorController {
 		return doc;
 	}
 	@DeleteMapping("/api/delete/doctors/{id}")
-	public String deleteDoctor(@PathVariable int doc_id){
+	public String deleteDoctor(@PathVariable(value="id") int doc_id){
 		Doctor doctor = docrepo.getOne(doc_id);
 		docrepo.delete(doctor);
 		return "deleted";
@@ -41,7 +41,7 @@ public class DoctorController {
 		return "updated";
 	}
 	@RequestMapping(path="api/doctors/{id}")
-	public Optional<Doctor> getDoctor(@PathVariable int doc_id){
+	public Optional<Doctor> getDoctor(@PathVariable(value="id") int doc_id){
 		Optional<Doctor> doctors = docrepo.findById(doc_id);
 		return doctors;
 	}

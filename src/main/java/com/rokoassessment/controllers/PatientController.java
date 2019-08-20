@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.rokoassessment.dao.PatientRepo;
 import com.rokoassessment.models.Patient;
@@ -30,7 +31,7 @@ public class PatientController {
 		return pat;
 	}
 	@DeleteMapping("/api/delete/patients/{id}")
-	public String deletePatient(@PathVariable int pat_id){
+	public String deletePatient(@PathVariable(value="id") int pat_id){
 		Patient patient = patrepo.getOne(pat_id);
 		patrepo.delete(patient);
 		return "deleted";
@@ -41,7 +42,7 @@ public class PatientController {
 		return "updated";
 	}
 	@RequestMapping(path="api/patients/{id}")
-	public Optional<Patient> getPatient(@PathVariable int pat_id){
+	public Optional<Patient> getPatient(@PathVariable(value="id") int pat_id){
 		Optional<Patient> patients = patrepo.findById(pat_id);
 		return patients;
 	}
