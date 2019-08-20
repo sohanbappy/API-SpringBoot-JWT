@@ -42,6 +42,7 @@ public class DoctorController {
 		doctor.setDept(doc.getDept());
 		doctor.setJoining(doc.getJoining());
 		docrepo.save(doctor);
+		
 		return "updated";
 	}
 	@RequestMapping(path="api/doctors/{id}")

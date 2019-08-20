@@ -46,6 +46,7 @@ public class PatientController {
 		patient.setOccupation(pat.getOccupation());
 		patient.setSymptom_summary(pat.getSymptom_summary());
 		patrepo.save(patient);
+		
 		return "updated";
 	}
 	@RequestMapping(path="api/patients/{id}")
