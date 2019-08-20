@@ -96,6 +96,9 @@ public class Patient {
 		this.occupation = occupation;
 		this.symptom_summary = symptom_summary;
 	}
+	public Patient() {
+		super();
+	}
 	
 
 }

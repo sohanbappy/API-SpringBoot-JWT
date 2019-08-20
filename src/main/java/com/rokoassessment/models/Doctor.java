@@ -66,6 +66,10 @@ public class Doctor {
 		this.joining = joining;
 	}
 
+	public Doctor() {
+		super();
+	}
+
 	
 
 }
