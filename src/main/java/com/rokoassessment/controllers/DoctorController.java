@@ -30,18 +30,22 @@ public class DoctorController {
 		return doc;
 	}
 	@DeleteMapping("/api/delete/doctors/{id}")
-	public String deleteDoctor(@PathVariable int doc_id){
+	public String deleteDoctor(@PathVariable(value="id") int doc_id){
 		Doctor doctor = docrepo.getOne(doc_id);
 		docrepo.delete(doctor);
 		return "deleted";
 	}
-	@PutMapping(path="/api/update/doctors", consumes = {"application/json"})
-	public String saveOrUpdateDoctor(@RequestBody Doctor doc){
-		docrepo.save(doc);
+	@PutMapping(path="/api/update/doctors/{id}", consumes = {"application/json"})
+	public String saveOrUpdateDoctor(@RequestBody Doctor doc,@PathVariable(value="id") int doc_id){
+		Doctor doctor = docrepo.getOne(doc_id);
+		doctor.setName(doc.getName());
+		doctor.setDept(doc.getDept());
+		doctor.setJoining(doc.getJoining());
+		docrepo.save(doctor);
 		return "updated";
 	}
 	@RequestMapping(path="api/doctors/{id}")
-	public Optional<Doctor> getDoctor(@PathVariable int doc_id){
+	public Optional<Doctor> getDoctor(@PathVariable(value="id") int doc_id){
 		Optional<Doctor> doctors = docrepo.findById(doc_id);
 		return doctors;
 	}

@@ -30,18 +30,25 @@ public class PatientController {
 		return pat;
 	}
 	@DeleteMapping("/api/delete/patients/{id}")
-	public String deletePatient(@PathVariable int pat_id){
+	public String deletePatient(@PathVariable(value="id") int pat_id){
 		Patient patient = patrepo.getOne(pat_id);
 		patrepo.delete(patient);
 		return "deleted";
 	}
-	@PutMapping(path="/api/update/patients", consumes = {"application/json"})
-	public String saveOrUpdatePatient(@RequestBody Patient pat){
-		patrepo.save(pat);
+	@PutMapping(path="/api/update/patients/{id}", consumes = {"application/json"})
+	public String saveOrUpdatePatient(@RequestBody Patient pat,@PathVariable(value="id") int pat_id){
+		Patient patient = patrepo.getOne(pat_id);
+		patient.setName(pat.getName());
+		patient.setAge(pat.getAge());
+		patient.setGender(pat.getGender());
+		patient.setMobile(pat.getMobile());
+		patient.setOccupation(pat.getOccupation());
+		patient.setSymptom_summary(pat.getSymptom_summary());
+		patrepo.save(patient);
 		return "updated";
 	}
 	@RequestMapping(path="api/patients/{id}")
-	public Optional<Patient> getPatient(@PathVariable int pat_id){
+	public Optional<Patient> getPatient(@PathVariable(value="id") int pat_id){
 		Optional<Patient> patients = patrepo.findById(pat_id);
 		return patients;
 	}
