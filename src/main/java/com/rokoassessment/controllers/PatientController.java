@@ -22,6 +22,7 @@ public class PatientController {
 	
 	@Autowired
 	private PatientRepo patrepo;
+	@Autowired
 	private PatientService patServ; 
 
 	@GetMapping(path="/api/patients")

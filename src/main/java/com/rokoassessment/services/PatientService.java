@@ -11,9 +11,10 @@ public class PatientService {
 				pat.getGender()==null || pat.getGender().isEmpty() || pat.getOccupation()==null || pat.getOccupation().isEmpty()) {
 			return false;
 		}
-		if(pat.getName().matches("^(([a-z]+)[ ]?)*$")) {
+		if(pat.getName().matches("^[a-zA-Z]{1,50}$")) {
 			return true;
 		}else {
+			System.out.println("name failed");
 			return false;
 		}
 	}
