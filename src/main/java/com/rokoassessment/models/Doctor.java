@@ -1,6 +1,5 @@
 package com.rokoassessment.models;
 
-import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +22,12 @@ public class Doctor {
 	private String name;
 	@Column(name="dept",nullable=false)
 	private String dept;
+	@Column(name="joining",nullable=false)
+	private String joining;
+	@Autowired
+	@ManyToMany(mappedBy="doctors")
+	private List<Patient> patients;
+	
 	public String getDept() {
 		return dept;
 	}
@@ -31,12 +36,6 @@ public class Doctor {
 		this.dept = dept;
 	}
 
-	@Column(name="joining",nullable=false)
-	private Date joining;
-	@Autowired
-	@ManyToMany(mappedBy="doctors")
-	private List<Patient> patients;
-	
 	public List<Patient> getPatients() {
 		return patients;
 	}
@@ -61,15 +60,15 @@ public class Doctor {
 		this.name = name;
 	}
 
-	public Date getJoining() {
+	public String getJoining() {
 		return joining;
 	}
 
-	public void setJoining(Date joining) {
+	public void setJoining(String joining) {
 		this.joining = joining;
 	}
 
-	public Doctor(int id, String name, Date joining) {
+	public Doctor(int id, String name, String joining) {
 		super();
 		this.id = id;
 		this.name = name;
