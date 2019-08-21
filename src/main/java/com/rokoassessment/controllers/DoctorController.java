@@ -3,6 +3,8 @@ package com.rokoassessment.controllers;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ public class DoctorController {
 	
 	@Autowired
 	private DoctorRepo docrepo;
+	@Autowired
 	private DoctorService docServ;
 
 	@GetMapping(path="/api/doctors")
@@ -27,25 +30,25 @@ public class DoctorController {
 		return docrepo.findAll();
 	}
 	@PostMapping(path="/api/insert/doctor/new", consumes = {"application/json"})
-	public Doctor addDoctor(@RequestBody Doctor doc) {
-		//validate
-		boolean valid = docServ.isValid(doc);
-		if(valid) {
-		docrepo.save(doc);
-		return doc;
+	public ResponseEntity<String> addDoctor(@RequestBody Doctor doc) {
+		 //validate
+		 boolean valid = docServ.isValid(doc);
+		 if(valid) {
+		 docrepo.save(doc);
+		 return new ResponseEntity<String>("created",HttpStatus.OK);
 		}else {
-			return doc;
+			 return new ResponseEntity<String>("not created",HttpStatus.BAD_REQUEST);
 		}
 		
 	}
 	@DeleteMapping("/api/delete/doctors/{id}")
-	public String deleteDoctor(@PathVariable(value="id") int doc_id){
+	public ResponseEntity<String> deleteDoctor(@PathVariable(value="id") int doc_id){
 		Doctor doctor = docrepo.getOne(doc_id);
 		docrepo.delete(doctor);
-		return "deleted";
+		return new ResponseEntity<String>("deleted",HttpStatus.OK);
 	}
 	@PutMapping(path="/api/update/doctors/{id}", consumes = {"application/json"})
-	public String saveOrUpdateDoctor(@RequestBody Doctor doc,@PathVariable(value="id") int doc_id){
+	public ResponseEntity<String> saveOrUpdateDoctor(@RequestBody Doctor doc,@PathVariable(value="id") int doc_id){
 		Doctor doctor = docrepo.getOne(doc_id);
 		doctor.setName(doc.getName());
 		doctor.setDept(doc.getDept());
@@ -54,9 +57,9 @@ public class DoctorController {
 		boolean valid = docServ.isValid(doctor);
 		if(valid) {
 		docrepo.save(doctor);
-		return "updated";
+		return new ResponseEntity<String>("updated",HttpStatus.OK);
 		}else {
-			return "not updated";
+			 return new ResponseEntity<String>("not updated",HttpStatus.BAD_REQUEST);
 		}
 		
 	}
