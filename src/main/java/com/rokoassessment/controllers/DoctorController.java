@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.rokoassessment.dao.DoctorRepo;
 import com.rokoassessment.models.Doctor;
+import com.rokoassessment.services.DoctorService;
 
 @RestController
 public class DoctorController {
 	
 	@Autowired
 	private DoctorRepo docrepo;
+	private DoctorService docServ;
 
 	@GetMapping(path="/api/doctors")
 	public List<Doctor> getAllDoctors(){
@@ -26,8 +28,15 @@ public class DoctorController {
 	}
 	@PostMapping(path="/api/insert/doctor/new", consumes = {"application/json"})
 	public Doctor addDoctor(@RequestBody Doctor doc) {
+		//validate
+		boolean valid = docServ.isValid(doc);
+		if(valid) {
 		docrepo.save(doc);
 		return doc;
+		}else {
+			return doc;
+		}
+		
 	}
 	@DeleteMapping("/api/delete/doctors/{id}")
 	public String deleteDoctor(@PathVariable(value="id") int doc_id){
@@ -41,9 +50,15 @@ public class DoctorController {
 		doctor.setName(doc.getName());
 		doctor.setDept(doc.getDept());
 		doctor.setJoining(doc.getJoining());
+		//validate
+		boolean valid = docServ.isValid(doctor);
+		if(valid) {
 		docrepo.save(doctor);
-		
 		return "updated";
+		}else {
+			return "not updated";
+		}
+		
 	}
 	@RequestMapping(path="api/doctors/{id}")
 	public Optional<Doctor> getDoctor(@PathVariable(value="id") int doc_id){
