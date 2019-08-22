@@ -3,6 +3,7 @@ package com.rokoassessment.controllers;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,7 +49,7 @@ public class DoctorController {
 		return new ResponseEntity<String>("deleted",HttpStatus.OK);
 	}
 	@PutMapping(path="/api/update/doctors/{id}", consumes = {"application/json"})
-	public ResponseEntity<String> saveOrUpdateDoctor(@RequestBody Doctor doc,@PathVariable(value="id") int doc_id){
+	public ResponseEntity<?> saveOrUpdateDoctor(@RequestBody Doctor doc,@PathVariable(value="id") int doc_id){
 		Doctor doctor = docrepo.getOne(doc_id);
 		doctor.setName(doc.getName());
 		doctor.setDept(doc.getDept());
@@ -56,10 +57,13 @@ public class DoctorController {
 		//validate
 		boolean valid = docServ.isValid(doctor);
 		if(valid) {
+			//setting header
+		HttpHeaders header = new HttpHeaders();
+		header.add("doctor_id", String.valueOf(doc_id));
 		docrepo.save(doctor);
-		return new ResponseEntity<String>("updated",HttpStatus.OK);
+		return ResponseEntity.ok("updated");
 		}else {
-			 return new ResponseEntity<String>("not updated",HttpStatus.BAD_REQUEST);
+		return ResponseEntity.badRequest().body("not updated");
 		}
 		
 	}
