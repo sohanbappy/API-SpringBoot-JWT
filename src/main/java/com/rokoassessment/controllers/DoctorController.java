@@ -61,7 +61,7 @@ public class DoctorController {
 		HttpHeaders header = new HttpHeaders();
 		header.add("doctor_id", String.valueOf(doc_id));
 		docrepo.save(doctor);
-		return ResponseEntity.ok("updated");
+		return ResponseEntity.accepted().headers(header).body("updated");
 		}else {
 		return ResponseEntity.badRequest().body("not updated");
 		}
