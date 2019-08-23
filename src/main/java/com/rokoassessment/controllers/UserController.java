@@ -1,6 +1,8 @@
 package com.rokoassessment.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ public class UserController {
 	UserService usServ;
 	@Autowired
 	JwtGenerator gen;
+	Map<String,String> status = new HashMap<String,String>(); 
 	
 	@GetMapping(path="/users")
 	public List<User> getAllUser(){
@@ -40,8 +43,10 @@ public class UserController {
 		HttpHeaders header = new HttpHeaders();
 		header.add("token",token);
 		return ResponseEntity.accepted().headers(header).body(user);
+		}else {
+		status.put("status","not created");
+		return ResponseEntity.badRequest().body(status.entrySet());
 		}
-		return ResponseEntity.badRequest().body("not created");
 	}
 	@PostMapping(path="/login", consumes = {"application/json"})
 	public User loginUser(@RequestBody String email,@RequestBody String password) {
