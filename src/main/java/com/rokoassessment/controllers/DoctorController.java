@@ -30,17 +30,22 @@ public class DoctorController {
 	@Autowired
 	JwtGenerator gen;
 	Map<String,String> status = new HashMap<String,String>();
-	HttpServletRequest req = null;
 	HttpHeaders header = null;
 	int doc_id = 0;
 	
 	@GetMapping(path="/api/doctors")
 	public List<Doctor> getAllDoctors(){
+		try {
 		return docrepo.findAll();
+		}catch(Exception ex) {
+		ex.printStackTrace();
+		return null;	
+		}
 	}
 	@PostMapping(path="/api/insert/doctor/new", consumes = {"application/json"})
 	public ResponseEntity<?> addDoctor(@RequestBody Doctor doc) {
-		 //validate
+		try { 
+		//validate
 		 boolean valid = docServ.isValid(doc);
 		 if(valid) {
 		 docrepo.save(doc);
@@ -55,18 +60,22 @@ public class DoctorController {
 			status.put("status","not created");
 			return ResponseEntity.badRequest().body(status.entrySet());
 		}
+	  }catch(Exception ex) {
+		  ex.printStackTrace();
+		  return null;
+	  }
 		
 	}
 	@DeleteMapping("/api/delete/doctors")
-	public ResponseEntity<?> deleteDoctor(){
-		
+	public ResponseEntity<?> deleteDoctor(HttpServletRequest req){
+		try {
 		doc_id = Integer.parseInt(req.getHeader("doctor_id"));
 		if(doc_id==0) {
 		status.put("status","doctor_id missing in Header");
 		return ResponseEntity.badRequest().body(status.entrySet());	
 		}
 		Doctor doctor = docrepo.getOne(doc_id);
-		if(doctor!=null) {
+		if(doctor!=null){
 		docrepo.delete(doctor);
 		//setting header
 		 header = new HttpHeaders();
@@ -78,9 +87,14 @@ public class DoctorController {
 			status.put("status","not found");
 			return ResponseEntity.badRequest().body(status.entrySet());
 		}
+	  }catch(Exception ex) {
+		  ex.printStackTrace();
+		  return null;
+	  }
 	}
 	@PutMapping(path="/api/update/doctors", consumes = {"application/json"})
-	public ResponseEntity<?> saveOrUpdateDoctor(@RequestBody Doctor doc){
+	public ResponseEntity<?> saveOrUpdateDoctor(@RequestBody Doctor doc,HttpServletRequest req){
+		try {
 		doc_id = Integer.parseInt(req.getHeader("doctor_id"));
 		if(doc_id==0) {
 		status.put("status","doctor_id missing in Header");
@@ -106,10 +120,15 @@ public class DoctorController {
 		status.put("status","not updated");	
 		return ResponseEntity.badRequest().body(status.entrySet());
 		}
+	 }catch(Exception ex) {
+		  ex.printStackTrace();
+		  return null;
+	  }
 		
 	}
 	@RequestMapping(path="api/doctors")
-	public ResponseEntity<?> getDoctor(){
+	public ResponseEntity<?> getDoctor(HttpServletRequest req){
+		try {
 		doc_id = Integer.parseInt(req.getHeader("doctor_id"));
 		if(doc_id==0) {
 		status.put("status","doctor_id missing in Header");
@@ -118,5 +137,10 @@ public class DoctorController {
 		Optional<Doctor> doctors = docrepo.findById(doc_id);
 		header.add("doctor_id", String.valueOf(doc_id));
 		return ResponseEntity.accepted().headers(header).body(doctors);
+		}
+		catch(Exception ex) {
+			  ex.printStackTrace();
+			  return null;
+		  }
 	}
 }

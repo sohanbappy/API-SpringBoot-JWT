@@ -29,16 +29,21 @@ public class PatientController {
 	private PatientService patServ; 
 	JwtGenerator gen;
 	Map<String,String> status = new HashMap<String,String>();
-	HttpServletRequest req = null;
 	HttpHeaders header = null;
 	int pat_id = 0;
 	
 	@GetMapping(path="/api/patients")
 	public List<Patient> getAllPatients(){
+		try {
 		return patrepo.findAll();
+		}catch(Exception ex) {
+			  ex.printStackTrace();
+			  return null;
+		  }
 	}
 	@PostMapping(path="/api/insert/patient/new", consumes = {"application/json"})
 	public ResponseEntity<?> addPatient(@RequestBody Patient pat) {
+		try {
 		//validate
 		boolean valid = patServ.isValid(pat);
 		if(valid) {
@@ -54,9 +59,14 @@ public class PatientController {
 			status.put("status","not created");
 			return ResponseEntity.badRequest().body(status.entrySet());
 		}
+	  }catch(Exception ex) {
+		  ex.printStackTrace();
+		  return null;
+	  }
 	}
 	@DeleteMapping("/api/delete/patients")
-	public ResponseEntity<?> deletePatient(){
+	public ResponseEntity<?> deletePatient(HttpServletRequest req){
+		try {
 		pat_id = Integer.parseInt(req.getHeader("patient_id"));
 		if(pat_id==0) {
 		status.put("status","patient_id missing in Header");
@@ -75,9 +85,14 @@ public class PatientController {
 			status.put("status","not found");
 			return ResponseEntity.badRequest().body(status.entrySet());
 		}
+	  }catch(Exception ex) {
+		  ex.printStackTrace();
+		  return null;
+	  }
 	}
 	@PutMapping(path="/api/update/patients", consumes = {"application/json"})
-	public ResponseEntity<?> saveOrUpdatePatient(@RequestBody Patient pat){
+	public ResponseEntity<?> saveOrUpdatePatient(@RequestBody Patient pat,HttpServletRequest req){
+		try {
 		pat_id = Integer.parseInt(req.getHeader("patient_id"));
 		if(pat_id==0) {
 		status.put("status","patient_id missing in Header");
@@ -107,10 +122,15 @@ public class PatientController {
 			status.put("status","not updated");	
 			return ResponseEntity.badRequest().body(status.entrySet());
 			}
+		}catch(Exception ex) {
+			  ex.printStackTrace();
+			  return null;
+		  }
 		
 	}
 	@RequestMapping(path="api/patients")
-	public ResponseEntity<?> getPatient(){
+	public ResponseEntity<?> getPatient(HttpServletRequest req){
+		try {
 		pat_id = Integer.parseInt(req.getHeader("patient_id"));
 		if(pat_id==0) {
 		status.put("status","patient_id missing in Header");
@@ -119,5 +139,9 @@ public class PatientController {
 		Optional<Patient> patients = patrepo.findById(pat_id);
 		header.add("patient_id", String.valueOf(pat_id));
 		return ResponseEntity.accepted().headers(header).body(patients);
+		}catch(Exception ex) {
+			  ex.printStackTrace();
+			  return null;
+		  }
 	}
 }

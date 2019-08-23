@@ -29,10 +29,16 @@ public class UserController {
 	
 	@GetMapping(path="/users")
 	public List<User> getAllUser(){
+		try {
 		return usrepo.findAll();
+		}catch(Exception ex) {
+			  ex.printStackTrace();
+			  return null;
+		  }
 	}
 	@PostMapping(path="/register", consumes = {"application/json"})
 	public ResponseEntity<?> addUser(@RequestBody User user) {
+		try {
 		//validate 
 		boolean valid = usServ.isValid(user);
 		if(valid) {
@@ -47,11 +53,20 @@ public class UserController {
 		status.put("status","not created");
 		return ResponseEntity.badRequest().body(status.entrySet());
 		}
+	  }catch(Exception ex) {
+		  ex.printStackTrace();
+		  return null;
+	  }
 	}
 	@PostMapping(path="/login", consumes = {"application/json"})
 	public User loginUser(@RequestBody String email,@RequestBody String password) {
+		try {
 		User user=null;
 		return user;
+		}catch(Exception ex) {
+			  ex.printStackTrace();
+			  return null;
+		  }
 	}
 	
 }
