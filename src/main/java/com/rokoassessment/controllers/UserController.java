@@ -71,8 +71,8 @@ public class UserController {
 	public ResponseEntity<?> userLogin(@RequestBody JwtUserLogin user,HttpServletRequest req) {
 		try {
 		String token = req.getHeader("token");
-		JwtUserDetails jwtUser = authProvider.retrieveUserNameAndEmail(token);
-		//getting User info
+		JwtUserDetails jwtUser = authProvider.retrieveUserNameAndEmail(user,token);
+		//getting User info if needed
 		List<User> users = usServ.getUserByEmail(jwtUser.getEmail());
 		//setting header
 		HttpHeaders header = new HttpHeaders();

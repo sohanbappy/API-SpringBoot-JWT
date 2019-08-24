@@ -22,8 +22,8 @@ public class JwtValidator {
 
             user = new JwtUserDetails();
             user.setFirst_name(body.getSubject());
-            user.setId(Integer.parseInt(((String) body.get("userId"))));
             user.setEmail((String) body.get("userEmail"));
+            user.setPassword((String) body.get("userPassword"));
         }
         catch (Exception e) {
             System.out.println(e);

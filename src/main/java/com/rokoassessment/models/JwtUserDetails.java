@@ -7,9 +7,11 @@ import java.util.Collection;
 
 public class JwtUserDetails implements UserDetails {
 
+	private static final long serialVersionUID = 1L;
 	private String first_name;
 	private String email;
-    private String token;
+	private String password;
+	private String token;
     private int id;
 
 
@@ -52,9 +54,13 @@ public class JwtUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
+   
 
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
     @Override
     public boolean isAccountNonExpired() {
