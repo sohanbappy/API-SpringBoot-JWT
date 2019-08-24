@@ -3,8 +3,7 @@ package com.rokoassessment.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Component;
-
-import com.rokoassessment.models.User;
+import com.rokoassessment.models.JwtUserDetails;
 
 @Component
 public class JwtValidator {
@@ -12,16 +11,16 @@ public class JwtValidator {
 
     private String secret = "rokomari";
 
-    public User validate(String token) {
+    public JwtUserDetails validate(String token) {
 
-        User user = null;
+        JwtUserDetails user = null;
         try {
             Claims body = Jwts.parser()
                     .setSigningKey(secret)
                     .parseClaimsJws(token)
                     .getBody();
 
-            user = new User();
+            user = new JwtUserDetails();
             user.setFirst_name(body.getSubject());
             user.setId(Integer.parseInt(((String) body.get("userId"))));
             user.setEmail((String) body.get("userEmail"));

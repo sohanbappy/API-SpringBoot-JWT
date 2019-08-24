@@ -4,11 +4,11 @@ package com.rokoassessment.models;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
-import java.util.List;
 
 public class JwtUserDetails implements UserDetails {
 
-    private String email;
+	private String first_name;
+	private String email;
     private String token;
     private int id;
 
@@ -20,7 +20,28 @@ public class JwtUserDetails implements UserDetails {
         this.token= token;
     }
 
-    @Override
+    public JwtUserDetails(String first_name, String email) {
+		this.first_name = first_name;
+		this.email = email;
+	}
+
+	public void setFirst_name(String first_name) {
+		this.first_name = first_name;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public JwtUserDetails() {
+		super();
+	}
+
+	@Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
@@ -55,6 +76,9 @@ public class JwtUserDetails implements UserDetails {
         return true;
     }
 
+    public String getFirst_name() {
+		return first_name;
+	}
 
     public String getEmail() {
         return email;

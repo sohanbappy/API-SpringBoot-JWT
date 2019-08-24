@@ -28,16 +28,25 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
         JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) usernamePasswordAuthenticationToken;
         String token = jwtAuthenticationToken.getToken();
 
-        User user = validator.validate(token);
+        JwtUserDetails user = validator.validate(token);
 
         if (user == null) {
             throw new RuntimeException("JWT Token is incorrect");
         }
 
-        return new JwtUserDetails(user.getEmail(), user.getId(),
-                token);
+        return new JwtUserDetails(user.getFirst_name(),user.getEmail());
     }
+    
+    public JwtUserDetails retrieveUserNameAndEmail(String givenToken) {
+    	 String token = givenToken;
+         JwtUserDetails user = validator.validate(token);
 
+         if (user == null) {
+             throw new RuntimeException("JWT Token is incorrect");
+         }
+         return new JwtUserDetails(user.getFirst_name(),user.getEmail());
+    }
+    
     @Override
     public boolean supports(Class<?> aClass) {
         return (JwtAuthenticationToken.class.isAssignableFrom(aClass));
